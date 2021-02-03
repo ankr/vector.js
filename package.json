@@ -1,5 +1,5 @@
 {
-  "name": "vector.js",
+  "name": "@ankr/vector.js",
   "version": "0.0.1",
   "type": "module",
   "description": "Simple \"immutable\" vector class.",
