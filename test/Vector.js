@@ -24,6 +24,15 @@ const notVectors = [
   new Number(1),
 ];
 
+describe('Vector properties', () => {
+  it('should be immutable', () => {
+    const v = new Vector(1, 2);
+
+    expect(() => v.x = 2).to.throw();
+    expect(() => v.y = 3).to.throw();
+  });
+});
+
 describe('Constructor', () => {
   it('should create from two numbers', () => {
     const v = new Vector(1, 2);
