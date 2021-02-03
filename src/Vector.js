@@ -311,21 +311,12 @@ export default class Vector {
   }
 
   /**
-   * Flip vector values
+   * Swap vector values
    *
    * @return Vector
    */
-  flip() {
+  swap() {
     return new Vector(this.y, this.x);
-  }
-
-  /**
-   * Clone vector
-   *
-   * @return Vector
-   */
-  clone() {
-    return new Vector(this.x, this.y);
   }
 
   /**
