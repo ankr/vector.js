@@ -2,26 +2,35 @@
 
 Simple "immutable" vector class.
 
-# Installation
+## Installation
 
-# 1. Access Token
-Create a [*Personal Access Token*](https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token) with *repo* and *read:packages* permissions.
+### 1. Access Token
 
-# 2. Login to registry
-Login with the scope _ankr_.
+Create a [*Personal Access Token*](https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token) with permissions:
+  * *repo*
+  * *read:packages*
+
+### 2. Login to registry
+
+Login with the scope `ankr` using **npm**.
+
 ```
-npm login --scope=@ankr --registry=https://npm.pkg.github.com
+$ npm login --scope=@ankr --registry=https://npm.pkg.github.com
 Username: YOUR_GITHUB_USERNAME
 Password: YOUR_PERSONAL_ACCESS_TOKEN
 Email: (this IS public) YOUR_EMAIL
 ```
 
-# 3. Install package
+### 3. Install package
+
 ```
-npm install @ankr/vector.js
+$ npm install @ankr/vector.js
 ```
 
-# Usage
+## Usage
+
+Import project
+
 ```
 import Vector, { TAU } from './node_modules/@ankr/vector.js/index.js';
 
