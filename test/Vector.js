@@ -1,10 +1,10 @@
-import { describe, it } from "node:test";
-import { equal, throws } from "node:assert/strict";
+import { describe, it } from 'node:test';
+import { equal, throws } from 'node:assert/strict';
 
-import {  Vector } from "../index.js";
+import {  Vector } from '../index.js';
 
-describe("Vector properties", () => {
-  it("should be immutable", () => {
+describe('Vector properties', () => {
+  it('should be immutable', () => {
     const v = new Vector(1, 2);
 
     throws(() => (v.x = 2));
@@ -12,8 +12,8 @@ describe("Vector properties", () => {
   });
 });
 
-describe("Constructor", () => {
-  it("should create from two numbers", () => {
+describe('Constructor', () => {
+  it('should create from two numbers', () => {
     const v = new Vector(1, 2);
 
     equal(v.x, 1);
@@ -21,8 +21,8 @@ describe("Constructor", () => {
   });
 });
 
-describe("Static methods", () => {
-  it("should have static methods for directions", () => {
+describe('Static methods', () => {
+  it('should have static methods for directions', () => {
     const up = Vector.up;
     equal(up.x, 0);
     equal(up.y, -1);
@@ -45,8 +45,8 @@ describe("Static methods", () => {
   });
 });
 
-describe("Vector", () => {
-  it("should have basic setters for x and y", () => {
+describe('Vector', () => {
+  it('should have basic setters for x and y', () => {
     const v = new Vector(2, 2);
 
     const x = v.setX(10);
@@ -58,7 +58,7 @@ describe("Vector", () => {
     equal(y.y, 5);
   });
 
-  it("should be able to add vectors and scalars", () => {
+  it('should be able to add vectors and scalars', () => {
     const v1 = new Vector(2, 3);
     const v2 = v1.add(new Vector(4, 5));
 
@@ -74,7 +74,7 @@ describe("Vector", () => {
     equal(v4.y, 13);
   });
 
-  it("should be able to subtract vectors and scalars", () => {
+  it('should be able to subtract vectors and scalars', () => {
     const v1 = new Vector(2, 3);
     const v2 = v1.sub(new Vector(4, 5));
 
@@ -90,7 +90,7 @@ describe("Vector", () => {
     equal(v4.y, -7);
   });
 
-  it("should be able to multiple with scalar", () => {
+  it('should be able to multiple with scalar', () => {
     const v1 = new Vector(3, 4);
     const v2 = v1.mul(3);
 
@@ -98,7 +98,7 @@ describe("Vector", () => {
     equal(v2.y, 12);
   });
 
-  it("should be able to divide with scalar", () => {
+  it('should be able to divide with scalar', () => {
     const v1 = new Vector(3, 4.5);
     const v2 = v1.div(3);
 
@@ -106,18 +106,18 @@ describe("Vector", () => {
     equal(v2.y, 1.5);
   });
 
-  it("should be able to calculate magnitude", () => {
+  it('should be able to calculate magnitude', () => {
     const v1 = new Vector(3, 4);
     equal(v1.mag(), 5);
     equal(v1.magSq(), 25);
   });
 
-  it("should be able to normalize vector", () => {
+  it('should be able to normalize vector', () => {
     const v1 = new Vector(3, 4);
     equal(v1.unit().mag(), 1);
   });
 
-  it("should be able to get the normal to a vector", () => {
+  it('should be able to get the normal to a vector', () => {
     const v1 = new Vector(3, 4);
     const n = v1.normal();
 
@@ -125,14 +125,14 @@ describe("Vector", () => {
     equal(n.y, 3);
   });
 
-  it("should return the dot product for two vectors", () => {
+  it('should return the dot product for two vectors', () => {
     const v1 = new Vector(3, 5);
     const d = v1.dot(new Vector(4, 2));
 
     equal(d, 22);
   });
 
-  it("should negate vector components", () => {
+  it('should negate vector components', () => {
     const v1 = new Vector(3, 5);
     const v2 = v1.negate();
 
@@ -148,7 +148,7 @@ describe("Vector", () => {
     equal(v4.y, -5);
   });
 
-  it("should swap components", () => {
+  it('should swap components', () => {
     const v1 = new Vector(3, 5);
     const v2 = v1.swap();
 
@@ -156,7 +156,7 @@ describe("Vector", () => {
     equal(v2.y, 3);
   });
 
-  it("should negate values", () => {
+  it('should negate values', () => {
     const v1 = new Vector(3, 5);
     const v2 = v1.negate();
 
@@ -164,17 +164,17 @@ describe("Vector", () => {
     equal(v2.y, -5);
   });
 
-  it("should calculate distance to other vector", () => {
+  it('should calculate distance to other vector', () => {
     const v1 = new Vector(3, 5);
     const d = v1.distance(new Vector(4, 8));
 
-    equal(d.toFixed(3), "3.162");
+    equal(d.toFixed(3), '3.162');
   });
 
-  it("should limit vector magnitude", () => {
+  it('should limit vector magnitude', () => {
     const v1 = new Vector(Math.random() * 1000, Math.random() * 1000);
     const v2 = v1.limit(2);
 
-    equal(v2.mag().toFixed(1), "2.0");
+    equal(v2.mag().toFixed(1), '2.0');
   });
 });
