@@ -1,10 +1,12 @@
 {
   "name": "@ankr/vector",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "type": "module",
   "description": "Simple \"immutable\" 2d vector class.",
   "main": "index.js",
-  "files": ["src/Vector.js"],
+  "files": [
+    "src/Vector.js"
+  ],
   "scripts": {
     "test": "node --test"
   },
