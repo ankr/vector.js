@@ -4,4 +4,4 @@
 
 # Checklist
 
-[ ] Add one of these labels: `major`, `minor`, `patch` or `skip-release`.
+ - [ ] Add one of these labels: `major`, `minor`, `patch` or `skip-release`.
