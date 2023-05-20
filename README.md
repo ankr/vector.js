@@ -9,7 +9,7 @@ $ npm install @ankr/vector.js
 
 # Usage
 ```
-import Vector, { TAU } from './node_modules/@ankr/vector.js/index.js';
+import { Vector, TAU } from '@ankr/vector';
 
 console.log(TAU, Vector);
 ```
