@@ -1,5 +1,5 @@
 {
-  "name": "@ankr/vector.js",
+  "name": "@ankr/vector",
   "version": "0.0.2",
   "type": "module",
   "description": "Simple 2d vector classes. Mutable and immutable.",
