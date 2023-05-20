@@ -1,204 +1,180 @@
-import * as mocha from '../node_modules/mocha/index.js';
-import * as chai from '../node_modules/chai/index.js';
-import Vector from '../index.js';
+import { describe, it } from "node:test";
+import { equal, throws } from "node:assert/strict";
 
-// Setup chai to work with es6 modules
-const assert = chai.default.assert;
-const should = chai.default.should();
-const expect = chai.default.expect;
+import {  Vector } from "../index.js";
 
-// This should also be detected as a Vector
-class ChildVector extends Vector {}
-
-// List of values that should not be detected as Vectors
-const notVectors = [
-  null,
-  undefined,
-  '',
-  'foo',
-  1,
-  0,
-  -1,
-  {},
-  new String('foo'),
-  new Number(1),
-];
-
-describe('Vector properties', () => {
-  it('should be immutable', () => {
+describe("Vector properties", () => {
+  it("should be immutable", () => {
     const v = new Vector(1, 2);
 
-    expect(() => v.x = 2).to.throw();
-    expect(() => v.y = 3).to.throw();
+    throws(() => (v.x = 2));
+    throws(() => (v.y = 3));
   });
 });
 
-describe('Constructor', () => {
-  it('should create from two numbers', () => {
+describe("Constructor", () => {
+  it("should create from two numbers", () => {
     const v = new Vector(1, 2);
 
-    expect(v.x).to.equal(1);
-    expect(v.y).to.equal(2);
+    equal(v.x, 1);
+    equal(v.y, 2);
   });
 });
 
-describe('Static methods', () => {
-  it('should have static methods for directions', () => {
+describe("Static methods", () => {
+  it("should have static methods for directions", () => {
     const up = Vector.up;
-    expect(up.x).to.equal(0);
-    expect(up.y).to.equal(-1);
+    equal(up.x, 0);
+    equal(up.y, -1);
 
     const down = Vector.down;
-    expect(down.x).to.equal(0);
-    expect(down.y).to.equal(1);
+    equal(down.x, 0);
+    equal(down.y, 1);
 
     const left = Vector.left;
-    expect(left.x).to.equal(-1);
-    expect(left.y).to.equal(0);
+    equal(left.x, -1);
+    equal(left.y, 0);
 
     const right = Vector.right;
-    expect(right.x).to.equal(1);
-    expect(right.y).to.equal(0);
+    equal(right.x, 1);
+    equal(right.y, 0);
 
     const zero = Vector.zero;
-    expect(zero.x).to.equal(0);
-    expect(zero.y).to.equal(0);
+    equal(zero.x, 0);
+    equal(zero.y, 0);
   });
 });
 
 describe("Vector", () => {
-  it('should have basic setters for x and y', () => {
+  it("should have basic setters for x and y", () => {
     const v = new Vector(2, 2);
 
     const x = v.setX(10);
-    expect(x.x).to.equal(10);
-    expect(x.y).to.equal(2);
+    equal(x.x, 10);
+    equal(x.y, 2);
 
     const y = v.setY(5);
-    expect(y.x).to.equal(2);
-    expect(y.y).to.equal(5);
+    equal(y.x, 2);
+    equal(y.y, 5);
   });
 
-  it('should be able to add vectors and scalars', () => {
+  it("should be able to add vectors and scalars", () => {
     const v1 = new Vector(2, 3);
     const v2 = v1.add(new Vector(4, 5));
 
-    expect(v2.x).to.equal(6);
-    expect(v2.y).to.equal(8);
+    equal(v2.x, 6);
+    equal(v2.y, 8);
 
     const v3 = v2.addX(10);
-    expect(v3.x).to.equal(16);
-    expect(v3.y).to.equal(8);
+    equal(v3.x, 16);
+    equal(v3.y, 8);
 
     const v4 = v2.addY(5);
-    expect(v4.x).to.equal(6);
-    expect(v4.y).to.equal(13);
+    equal(v4.x, 6);
+    equal(v4.y, 13);
   });
 
-  it('should be able to subtract vectors and scalars', () => {
+  it("should be able to subtract vectors and scalars", () => {
     const v1 = new Vector(2, 3);
     const v2 = v1.sub(new Vector(4, 5));
 
-    expect(v2.x).to.equal(-2);
-    expect(v2.y).to.equal(-2);
+    equal(v2.x, -2);
+    equal(v2.y, -2);
 
     const v3 = v2.subX(10);
-    expect(v3.x).to.equal(-12);
-    expect(v3.y).to.equal(-2);
+    equal(v3.x, -12);
+    equal(v3.y, -2);
 
     const v4 = v2.subY(5);
-    expect(v4.x).to.equal(-2);
-    expect(v4.y).to.equal(-7);
+    equal(v4.x, -2);
+    equal(v4.y, -7);
   });
 
-  it('should be able to multiple with scalar', () => {
+  it("should be able to multiple with scalar", () => {
     const v1 = new Vector(3, 4);
     const v2 = v1.mul(3);
 
-    expect(v2.x).to.equal(9);
-    expect(v2.y).to.equal(12);
+    equal(v2.x, 9);
+    equal(v2.y, 12);
   });
 
-  it('should be able to divide with scalar', () => {
+  it("should be able to divide with scalar", () => {
     const v1 = new Vector(3, 4.5);
     const v2 = v1.div(3);
 
-    expect(v2.x).to.equal(1);
-    expect(v2.y).to.equal(1.5);
+    equal(v2.x, 1);
+    equal(v2.y, 1.5);
   });
 
-  it('should be able to calculate magnitude', () => {
+  it("should be able to calculate magnitude", () => {
     const v1 = new Vector(3, 4);
-    expect(v1.mag()).to.equal(5);
-    expect(v1.magSq()).to.equal(25);
+    equal(v1.mag(), 5);
+    equal(v1.magSq(), 25);
   });
 
-  it('should be able to normalize vector', () => {
+  it("should be able to normalize vector", () => {
     const v1 = new Vector(3, 4);
-    expect(v1.unit().mag()).to.equal(1);
+    equal(v1.unit().mag(), 1);
   });
 
-  it('should be able to get the normal to a vector', () => {
+  it("should be able to get the normal to a vector", () => {
     const v1 = new Vector(3, 4);
     const n = v1.normal();
 
-    expect(n.x).to.equal(-4);
-    expect(n.y).to.equal(3);
+    equal(n.x, -4);
+    equal(n.y, 3);
   });
 
-  it('should return the dot product for two vectors', () => {
+  it("should return the dot product for two vectors", () => {
     const v1 = new Vector(3, 5);
     const d = v1.dot(new Vector(4, 2));
 
-    expect(d).to.equal(22);
+    equal(d, 22);
   });
 
-  it('should negate vector components', () => {
+  it("should negate vector components", () => {
     const v1 = new Vector(3, 5);
     const v2 = v1.negate();
 
-    expect(v2.x).to.equal(-3);
-    expect(v2.y).to.equal(-5);
+    equal(v2.x, -3);
+    equal(v2.y, -5);
 
     const v3 = v1.negateX();
-    expect(v3.x).to.equal(-3);
-    expect(v3.y).to.equal(5);
+    equal(v3.x, -3);
+    equal(v3.y, 5);
 
     const v4 = v1.negateY();
-    expect(v4.x).to.equal(3);
-    expect(v4.y).to.equal(-5);
+    equal(v4.x, 3);
+    equal(v4.y, -5);
   });
 
-  it('should swap components', () => {
+  it("should swap components", () => {
     const v1 = new Vector(3, 5);
     const v2 = v1.swap();
 
-    expect(v2.x).to.equal(5);
-    expect(v2.y).to.equal(3);
+    equal(v2.x, 5);
+    equal(v2.y, 3);
   });
 
-  it('should negate values', () => {
+  it("should negate values", () => {
     const v1 = new Vector(3, 5);
     const v2 = v1.negate();
 
-    expect(v2.x).to.equal(-3);
-    expect(v2.y).to.equal(-5);
+    equal(v2.x, -3);
+    equal(v2.y, -5);
   });
 
-  it('should calculate distance to other vector', () => {
+  it("should calculate distance to other vector", () => {
     const v1 = new Vector(3, 5);
     const d = v1.distance(new Vector(4, 8));
 
-    expect(d.toFixed(3)).to.equal('3.162');
+    equal(d.toFixed(3), "3.162");
   });
 
-  it('should limit vector magnitude', () => {
-    const v1 = new Vector(
-      Math.random() * 1000,
-      Math.random() * 1000
-    );
+  it("should limit vector magnitude", () => {
+    const v1 = new Vector(Math.random() * 1000, Math.random() * 1000);
     const v2 = v1.limit(2);
 
-    expect(v2.mag().toFixed(1)).to.equal('2.0');
+    equal(v2.mag().toFixed(1), "2.0");
   });
 });
