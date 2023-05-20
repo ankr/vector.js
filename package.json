@@ -2,8 +2,9 @@
   "name": "@ankr/vector",
   "version": "1.0.0",
   "type": "module",
-  "description": "Simple 2d vector classes. Mutable and immutable.",
+  "description": "Simple \"immutable\" 2d vector class.",
   "main": "index.js",
+  "files": ["src/Vector.js"],
   "scripts": {
     "test": "node --test"
   },
