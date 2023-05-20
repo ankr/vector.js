@@ -2,26 +2,22 @@
   "name": "@ankr/vector.js",
   "version": "0.0.2",
   "type": "module",
-  "description": "Simple \"immutable\" vector class.",
+  "description": "Simple 2d vector classes. Mutable and immutable.",
   "main": "index.js",
   "scripts": {
-    "test": "mocha"
+    "test": "node --test"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ankr/Vector.js.git"
   },
   "author": "ankr",
-  "license": "WTFPL",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/ankr/Vector.js/issues"
   },
   "publishConfig": {
-    "registry": "https://npm.pkg.github.com/"
+    "access": "public"
   },
-  "homepage": "https://github.com/ankr/Vector.js#readme",
-  "devDependencies": {
-    "chai": "^4.2.0",
-    "mocha": "^8.2.1"
-  }
+  "homepage": "https://github.com/ankr/Vector.js#readme"
 }
