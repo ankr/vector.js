@@ -199,6 +199,10 @@ export class Vector {
    * @return {Vector}
    */
   div(s) {
+    if (s === 0) {
+      throw new Error('Can not divide vector with zero.');
+    }
+
     return new Vector(this.x / s, this.y / s);
   }
 
@@ -246,13 +250,7 @@ export class Vector {
    * @return {Vector}
    */
   unit() {
-    const mag = this.mag();
-
-    if (mag === 0) {
-      throw new Error('Can not normalize vector with zero length.');
-    }
-
-    return this.div(mag);
+    return this.div(this.mag());
   }
 
   /**
