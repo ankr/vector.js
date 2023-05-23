@@ -6,7 +6,6 @@ export { TAU };
  * Simple "immutable" vector class
  */
 export default class Vector {
-
   /**
    * Constructor
    *
@@ -250,7 +249,7 @@ export default class Vector {
     const mag = this.mag();
 
     if (mag === 0) {
-      throw new Error("Can not normalize vector with zero length.");
+      throw new Error('Can not normalize vector with zero length.');
     }
 
     return this.div(mag);
@@ -319,6 +318,15 @@ export default class Vector {
    */
   swap() {
     return new Vector(this.y, this.x);
+  }
+
+  /**
+   * Get angle from X axis.
+   *
+   * @return {number}
+   */
+  angle() {
+    return Math.atan2(this.y, this.x);
   }
 
   /**
