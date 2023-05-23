@@ -1,1 +1,1 @@
-export { TAU, default as Vector } from './src/Vector.js';
+export { TAU, Vector } from './src/Vector.js';

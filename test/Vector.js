@@ -1,7 +1,7 @@
 import { describe, it } from 'node:test';
 import { equal, throws } from 'node:assert/strict';
 
-import {  Vector } from '../index.js';
+import { Vector } from '../index.js';
 
 describe('Vector properties', () => {
   it('should be immutable', () => {
@@ -154,6 +154,13 @@ describe('Vector', () => {
 
     equal(v2.x, 5);
     equal(v2.y, 3);
+  });
+
+  it('should return angle', () => {
+    const v = new Vector(1, 1);
+    const a = v.angle();
+
+    equal(a, Math.PI / 4);
   });
 
   it('should negate values', () => {

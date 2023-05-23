@@ -5,8 +5,7 @@ export { TAU };
 /**
  * Simple "immutable" vector class
  */
-export default class Vector {
-
+export class Vector {
   /**
    * Constructor
    *
@@ -71,7 +70,7 @@ export default class Vector {
    * @return {Vector}
    */
   static get random() {
-    return {Vector}.fromAngle(TAU * Math.random());
+    return Vector.fromAngle(TAU * Math.random());
   }
 
   /**
@@ -200,6 +199,10 @@ export default class Vector {
    * @return {Vector}
    */
   div(s) {
+    if (s === 0) {
+      throw new Error('Can not divide vector with zero.');
+    }
+
     return new Vector(this.x / s, this.y / s);
   }
 
@@ -247,13 +250,7 @@ export default class Vector {
    * @return {Vector}
    */
   unit() {
-    const mag = this.mag();
-
-    if (mag === 0) {
-      throw new Error("Can not normalize vector with zero length.");
-    }
-
-    return this.div(mag);
+    return this.div(this.mag());
   }
 
   /**
@@ -322,6 +319,15 @@ export default class Vector {
   }
 
   /**
+   * Get angle from X axis.
+   *
+   * @return {number}
+   */
+  angle() {
+    return Math.atan2(this.y, this.x);
+  }
+
+  /**
    * Distance to other vector
    *
    * @param {Vector} v
@@ -346,8 +352,8 @@ export default class Vector {
     let y = this.y;
 
     if (mag > l) {
-      x = x * l / mag;
-      y = y * l / mag;
+      x = (x * l) / mag;
+      y = (y * l) / mag;
     }
 
     return new Vector(x, y);
