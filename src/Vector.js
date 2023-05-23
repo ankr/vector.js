@@ -5,7 +5,7 @@ export { TAU };
 /**
  * Simple "immutable" vector class
  */
-export default class Vector {
+export class Vector {
   /**
    * Constructor
    *
