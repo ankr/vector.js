@@ -70,7 +70,7 @@ export default class Vector {
    * @return {Vector}
    */
   static get random() {
-    return {Vector}.fromAngle(TAU * Math.random());
+    return Vector.fromAngle(TAU * Math.random());
   }
 
   /**
@@ -354,8 +354,8 @@ export default class Vector {
     let y = this.y;
 
     if (mag > l) {
-      x = x * l / mag;
-      y = y * l / mag;
+      x = (x * l) / mag;
+      y = (y * l) / mag;
     }
 
     return new Vector(x, y);
