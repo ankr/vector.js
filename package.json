@@ -1,6 +1,6 @@
 {
   "name": "@ankr/vector",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "type": "module",
   "description": "Simple \"immutable\" 2d vector class.",
   "main": "index.js",
