@@ -106,6 +106,11 @@ describe('Vector', () => {
     equal(v2.y, 1.5);
   });
 
+  it('should throw error when dividing with zero', () => {
+    const v1 = new Vector(3, 4);
+    throws(() => v1.div(0));
+  });
+
   it('should be able to calculate magnitude', () => {
     const v1 = new Vector(3, 4);
     equal(v1.mag(), 5);
