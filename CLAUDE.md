@@ -31,7 +31,8 @@ There are no dependencies, no build step and no linter. CI runs `npm test` on No
 - **Naming:** whole-vector ops have short names (`add`, `sub`, `mul`, `div`, `negate`). Per-component variants add an `X`/`Y` suffix (`addX`, `mulY`, `negateX`, ...). Vector arguments are named `v` and scalar arguments `s`.
 - **Screen coordinates (y-down):** `Vector.up` is `(0, -1)` and `Vector.down` is `(0, 1)`. Keep this in mind for anything involving direction or rotation.
 - **No runtime type checks:** argument types are left to typing, not checked on every call. Only invalid *values* are guarded (division by zero, negative `limit`).
-- Static presets (`zero`, `up`, `down`, `left`, `right`, `random`) are **getters** that return a fresh instance on every access. `random` is a unit vector at a random angle.
+- Static presets (`zero`, `up`, `down`, `left`, `right`) are **getters** that return a shared, cached instance (private static fields). That is safe only because vectors are frozen. `Vector.random` is also a getter but returns a new random unit vector on every access.
+- Since vectors are immutable, a method may return `this` when the result would be unchanged (see `limit`).
 
 ## Tests
 

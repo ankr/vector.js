@@ -44,6 +44,15 @@ describe('Static methods', () => {
     equal(zero.y, 0);
   });
 
+  it('should return the same frozen instance for presets', () => {
+    equal(Vector.zero, Vector.zero);
+    equal(Vector.up, Vector.up);
+    equal(Vector.down, Vector.down);
+    equal(Vector.left, Vector.left);
+    equal(Vector.right, Vector.right);
+    throws(() => (Vector.zero = new Vector(1, 1)));
+  });
+
   it('should create unit vector from angle', () => {
     const v = Vector.fromAngle(Math.PI / 2);
 
@@ -263,6 +272,7 @@ describe('Vector', () => {
   it('should not change vector shorter than limit', () => {
     const v1 = new Vector(3, 4);
     const v2 = v1.limit(10);
+    equal(v1.limit(5), v1);
 
     equal(v2.x, 3);
     equal(v2.y, 4);

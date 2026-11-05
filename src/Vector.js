@@ -6,6 +6,13 @@ export { TAU };
  * Simple "immutable" vector class
  */
 export class Vector {
+  // Vectors are frozen, so the presets can safely be shared instances
+  static #zero = new Vector(0, 0);
+  static #up = new Vector(0, -1);
+  static #down = new Vector(0, 1);
+  static #left = new Vector(-1, 0);
+  static #right = new Vector(1, 0);
+
   /**
    * Constructor
    *
@@ -25,7 +32,7 @@ export class Vector {
    * @return {Vector}
    */
   static get zero() {
-    return new Vector(0, 0);
+    return Vector.#zero;
   }
 
   /**
@@ -34,7 +41,7 @@ export class Vector {
    * @return {Vector}
    */
   static get up() {
-    return new Vector(0, -1);
+    return Vector.#up;
   }
 
   /**
@@ -43,7 +50,7 @@ export class Vector {
    * @return {Vector}
    */
   static get down() {
-    return new Vector(0, 1);
+    return Vector.#down;
   }
 
   /**
@@ -52,7 +59,7 @@ export class Vector {
    * @return {Vector}
    */
   static get left() {
-    return new Vector(-1, 0);
+    return Vector.#left;
   }
 
   /**
@@ -61,7 +68,7 @@ export class Vector {
    * @return {Vector}
    */
   static get right() {
-    return new Vector(1, 0);
+    return Vector.#right;
   }
 
   /**
@@ -379,15 +386,15 @@ export class Vector {
       throw new RangeError('Can not limit vector to a negative magnitude.');
     }
 
-    const mag = this.mag();
-    let x = this.x;
-    let y = this.y;
+    const magSq = this.magSq();
 
-    if (mag > l) {
-      x = (x * l) / mag;
-      y = (y * l) / mag;
+    // Compare squared magnitudes to skip the square root when within the limit
+    if (magSq <= l * l) {
+      return this;
     }
 
-    return new Vector(x, y);
+    const mag = Math.sqrt(magSq);
+
+    return new Vector((this.x * l) / mag, (this.y * l) / mag);
   }
 }
