@@ -3,6 +3,32 @@ const TAU = Math.PI * 2;
 export { TAU };
 
 /**
+ * Throw if value is not a number (NaN is rejected, Infinity is allowed)
+ *
+ * @param {*} n
+ * @param {string} name
+ */
+function assertNumber(n, name) {
+  if (typeof n !== 'number' || Number.isNaN(n)) {
+    throw new TypeError(`Expected ${name} to be a number, got ${String(n)}.`);
+  }
+}
+
+/**
+ * Throw if value is not vector-like (an object with numeric x and y)
+ *
+ * @param {*} v
+ */
+function assertVector(v) {
+  if (v === null || typeof v !== 'object') {
+    throw new TypeError(`Expected a vector, got ${String(v)}.`);
+  }
+
+  assertNumber(v.x, 'vector x');
+  assertNumber(v.y, 'vector y');
+}
+
+/**
  * Simple "immutable" vector class
  */
 export class Vector {
@@ -13,6 +39,9 @@ export class Vector {
    * @param {number} y
    */
   constructor(x, y) {
+    assertNumber(x, 'x');
+    assertNumber(y, 'y');
+
     this.x = x;
     this.y = y;
 
@@ -79,6 +108,8 @@ export class Vector {
    * @return {Vector}
    */
   static fromAngle(angle) {
+    assertNumber(angle, 'angle');
+
     return new Vector(Math.cos(angle), Math.sin(angle));
   }
 
@@ -89,6 +120,8 @@ export class Vector {
    * @return {Vector}
    */
   setX(x) {
+    assertNumber(x, 'x');
+
     return new Vector(x, this.y);
   }
 
@@ -99,6 +132,8 @@ export class Vector {
    * @return {Vector}
    */
   setY(y) {
+    assertNumber(y, 'y');
+
     return new Vector(this.x, y);
   }
 
@@ -109,6 +144,8 @@ export class Vector {
    * @return {Vector}
    */
   add(v) {
+    assertVector(v);
+
     return new Vector(this.x + v.x, this.y + v.y);
   }
 
@@ -119,6 +156,8 @@ export class Vector {
    * @return {Vector}
    */
   addX(s) {
+    assertNumber(s, 'scalar');
+
     return new Vector(this.x + s, this.y);
   }
 
@@ -129,6 +168,8 @@ export class Vector {
    * @return {Vector}
    */
   addY(s) {
+    assertNumber(s, 'scalar');
+
     return new Vector(this.x, this.y + s);
   }
 
@@ -139,6 +180,8 @@ export class Vector {
    * @return {Vector}
    */
   sub(v) {
+    assertVector(v);
+
     return new Vector(this.x - v.x, this.y - v.y);
   }
 
@@ -149,6 +192,8 @@ export class Vector {
    * @return {Vector}
    */
   subX(s) {
+    assertNumber(s, 'scalar');
+
     return new Vector(this.x - s, this.y);
   }
 
@@ -159,6 +204,8 @@ export class Vector {
    * @return {Vector}
    */
   subY(s) {
+    assertNumber(s, 'scalar');
+
     return new Vector(this.x, this.y - s);
   }
 
@@ -169,6 +216,8 @@ export class Vector {
    * @return {Vector}
    */
   mul(s) {
+    assertNumber(s, 'scalar');
+
     return new Vector(this.x * s, this.y * s);
   }
 
@@ -179,6 +228,8 @@ export class Vector {
    * @return {Vector}
    */
   mulX(s) {
+    assertNumber(s, 'scalar');
+
     return new Vector(this.x * s, this.y);
   }
 
@@ -189,6 +240,8 @@ export class Vector {
    * @return {Vector}
    */
   mulY(s) {
+    assertNumber(s, 'scalar');
+
     return new Vector(this.x, this.y * s);
   }
 
@@ -199,6 +252,8 @@ export class Vector {
    * @return {Vector}
    */
   div(s) {
+    assertNumber(s, 'scalar');
+
     if (s === 0) {
       throw new Error('Can not divide vector with zero.');
     }
@@ -213,6 +268,8 @@ export class Vector {
    * @return {Vector}
    */
   divX(s) {
+    assertNumber(s, 'scalar');
+
     if (s === 0) {
       throw new Error('Can not divide vector with zero.');
     }
@@ -227,6 +284,8 @@ export class Vector {
    * @return {Vector}
    */
   divY(s) {
+    assertNumber(s, 'scalar');
+
     if (s === 0) {
       throw new Error('Can not divide vector with zero.');
     }
@@ -272,6 +331,10 @@ export class Vector {
   /**
    * Get normal vector
    *
+   * Rotates the vector 90 degrees: (x, y) becomes (-y, x). This is
+   * counter-clockwise in maths (y-up) coordinates, and therefore clockwise
+   * on screen, where y points down (see `Vector.up`).
+   *
    * @return {Vector}
    */
   normal() {
@@ -285,6 +348,8 @@ export class Vector {
    * @return {number}
    */
   dot(v) {
+    assertVector(v);
+
     return this.x * v.x + this.y * v.y;
   }
 
@@ -327,6 +392,9 @@ export class Vector {
    * @return {boolean}
    */
   equals(v, epsilon = 0) {
+    assertVector(v);
+    assertNumber(epsilon, 'epsilon');
+
     return (
       (this.x === v.x || Math.abs(this.x - v.x) <= epsilon) &&
       (this.y === v.y || Math.abs(this.y - v.y) <= epsilon)
@@ -358,6 +426,8 @@ export class Vector {
    * @return {number}
    */
   distance(v) {
+    assertVector(v);
+
     const x = this.x - v.x;
     const y = this.y - v.y;
 
@@ -371,6 +441,12 @@ export class Vector {
    * @return {Vector}
    */
   limit(l) {
+    assertNumber(l, 'limit');
+
+    if (l < 0) {
+      throw new RangeError('Can not limit vector to a negative magnitude.');
+    }
+
     const mag = this.mag();
     let x = this.x;
     let y = this.y;

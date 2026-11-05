@@ -19,6 +19,57 @@ describe('Constructor', () => {
     equal(v.x, 1);
     equal(v.y, 2);
   });
+
+  it('should reject non-numbers and NaN', () => {
+    throws(() => new Vector(), TypeError);
+    throws(() => new Vector(1), TypeError);
+    throws(() => new Vector('1', 2), TypeError);
+    throws(() => new Vector(1, NaN), TypeError);
+  });
+
+  it('should allow infinity', () => {
+    const v = new Vector(Infinity, -Infinity);
+
+    equal(v.x, Infinity);
+    equal(v.y, -Infinity);
+  });
+});
+
+describe('Argument validation', () => {
+  const v = new Vector(3, 4);
+
+  it('should reject invalid vector arguments', () => {
+    for (const bad of [undefined, null, 5, '1,2', {}, { x: 1 }, { x: '1', y: 2 }]) {
+      throws(() => v.add(bad), TypeError);
+      throws(() => v.sub(bad), TypeError);
+      throws(() => v.dot(bad), TypeError);
+      throws(() => v.distance(bad), TypeError);
+      throws(() => v.equals(bad), TypeError);
+    }
+  });
+
+  it('should accept vector-like objects', () => {
+    const v2 = v.add({ x: 1, y: 1 });
+
+    equal(v2.x, 4);
+    equal(v2.y, 5);
+  });
+
+  it('should reject invalid scalar arguments', () => {
+    const methods = [
+      'setX', 'setY', 'addX', 'addY', 'subX', 'subY',
+      'mul', 'mulX', 'mulY', 'div', 'divX', 'divY', 'limit',
+    ];
+
+    for (const method of methods) {
+      for (const bad of [undefined, null, '2', NaN, {}]) {
+        throws(() => v[method](bad), TypeError, method);
+      }
+    }
+
+    throws(() => v.equals(v, '0.1'), TypeError);
+    throws(() => Vector.fromAngle('1'), TypeError);
+  });
 });
 
 describe('Static methods', () => {
@@ -246,6 +297,18 @@ describe('Vector', () => {
     equal(v2.mag(), 2);
     equal(v2.x, 1.2);
     equal(v2.y, 1.6);
+  });
+
+  it('should throw when limiting to a negative magnitude', () => {
+    const v1 = new Vector(3, 4);
+    throws(() => v1.limit(-1), RangeError);
+  });
+
+  it('should limit to zero', () => {
+    const v1 = new Vector(3, 4).limit(0);
+
+    equal(v1.x, 0);
+    equal(v1.y, 0);
   });
 
   it('should not change vector shorter than limit', () => {

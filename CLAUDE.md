@@ -27,7 +27,7 @@ There are no dependencies, no build step and no linter. CI runs `npm test` on No
 - **ES modules only** (`"type": "module"`). Use `import`/`export` and include the `.js` extension in relative imports.
 - **Style** (`.editorconfig`): 2-space indent, single quotes, LF line endings, final newline.
 - **Every method gets a JSDoc block** with `@param`/`@return` types, matching the existing ones.
-- **Immutability:** the constructor calls `Object.freeze(this)`. Every operation returns a **new** `Vector` and never mutates `this`. New methods must follow this rule. Assigning to `x`/`y` throws only because ES module code runs in strict mode; in sloppy mode the assignment would silently fail.
+- **Immutability:** the constructor calls `Object.freeze(this)`. Every operation returns a **new** `Vector` and never mutates `this`. New methods must follow this rule. Assigning to `x`/`y` throws a `TypeError` only when the *calling* code runs in strict mode (ES modules always do). In sloppy-mode scripts the assignment is silently ignored. This is a known limitation: only a `Proxy` could make it always throw, and that would slow down every property access.
 - **Naming:** whole-vector ops have short names (`add`, `sub`, `mul`, `div`, `negate`). Per-component variants add an `X`/`Y` suffix (`addX`, `mulY`, `negateX`, ...). Vector arguments are named `v` and scalar arguments `s`.
 - **Screen coordinates (y-down):** `Vector.up` is `(0, -1)` and `Vector.down` is `(0, 1)`. Keep this in mind for anything involving direction or rotation.
 - Static presets (`zero`, `up`, `down`, `left`, `right`, `random`) are **getters** that return a fresh instance on every access. `random` is a unit vector at a random angle.
@@ -41,9 +41,9 @@ Check these before changing behaviour:
 - `normal()` returns `(-y, x)`. That is a 90° counter-clockwise rotation in maths (y-up) coordinates, which looks clockwise on screen because y points down.
 - `angle()` uses `Math.atan2(y, x)` and returns a value in `(-π, π]`. `fromAngle(a)` gives `(cos a, sin a)`, the inverse for unit vectors.
 - `equals(v, epsilon = 0)` is an exact match by default. Pass a small `epsilon` (for example `1e-9`) when comparing results of floating-point calculations such as `fromAngle`.
-- `limit(l)` scales the vector down only when `mag > l` and never scales it up.
+- `limit(l)` scales the vector down only when `mag > l` and never scales it up. A negative `l` throws a `RangeError`.
 - `distance(v)` reimplements the magnitude formula inline instead of calling `this.sub(v).mag()`, which avoids allocating a temporary vector.
-- Methods do not validate their arguments. Non-numbers or non-Vectors produce `NaN`.
+- **Arguments are validated** with the module-private helpers `assertNumber` and `assertVector`, which throw a `TypeError`. The constructor rejects anything that isn't a number, including `NaN` (`Infinity` is allowed). Each method also checks its own arguments, so `mul('2')` throws instead of being silently coerced. Vector arguments are duck-typed: any object with numeric `x` and `y` is accepted. New methods should call the matching helper first.
 
 ## Tests
 
