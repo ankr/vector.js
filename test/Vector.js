@@ -43,6 +43,20 @@ describe('Static methods', () => {
     equal(zero.x, 0);
     equal(zero.y, 0);
   });
+
+  it('should create unit vector from angle', () => {
+    const v = Vector.fromAngle(Math.PI / 2);
+
+    equal(v.x.toFixed(3), '0.000');
+    equal(v.y, 1);
+    equal(Vector.fromAngle(0).equals(Vector.right), true);
+  });
+
+  it('should create random unit vector', () => {
+    const v = Vector.random;
+
+    equal(v.mag().toFixed(3), '1.000');
+  });
 });
 
 describe('Vector', () => {
@@ -96,6 +110,14 @@ describe('Vector', () => {
 
     equal(v2.x, 9);
     equal(v2.y, 12);
+
+    const v3 = v1.mulX(2);
+    equal(v3.x, 6);
+    equal(v3.y, 4);
+
+    const v4 = v1.mulY(2);
+    equal(v4.x, 3);
+    equal(v4.y, 8);
   });
 
   it('should be able to divide with scalar', () => {
@@ -104,11 +126,21 @@ describe('Vector', () => {
 
     equal(v2.x, 1);
     equal(v2.y, 1.5);
+
+    const v3 = v1.divX(3);
+    equal(v3.x, 1);
+    equal(v3.y, 4.5);
+
+    const v4 = v1.divY(3);
+    equal(v4.x, 3);
+    equal(v4.y, 1.5);
   });
 
   it('should throw error when dividing with zero', () => {
     const v1 = new Vector(3, 4);
     throws(() => v1.div(0));
+    throws(() => v1.divX(0));
+    throws(() => v1.divY(0));
   });
 
   it('should be able to calculate magnitude', () => {
@@ -120,6 +152,30 @@ describe('Vector', () => {
   it('should be able to normalize vector', () => {
     const v1 = new Vector(3, 4);
     equal(v1.unit().mag(), 1);
+  });
+
+  it('should return zero vector when normalizing zero vector', () => {
+    const v = Vector.zero.unit();
+
+    equal(v.x, 0);
+    equal(v.y, 0);
+  });
+
+  it('should test equality', () => {
+    const v1 = new Vector(3, 5);
+
+    equal(v1.equals(new Vector(3, 5)), true);
+    equal(v1.equals(new Vector(3, 6)), false);
+    equal(v1.equals(new Vector(4, 5)), false);
+  });
+
+  it('should test equality within epsilon', () => {
+    const v1 = new Vector(0.1 + 0.2, 1);
+    const v2 = new Vector(0.3, 1);
+
+    equal(v1.equals(v2), false);
+    equal(v1.equals(v2, 1e-9), true);
+    equal(v1.equals(new Vector(0.4, 1), 1e-9), false);
   });
 
   it('should be able to get the normal to a vector', () => {
@@ -184,9 +240,19 @@ describe('Vector', () => {
   });
 
   it('should limit vector magnitude', () => {
-    const v1 = new Vector(Math.random() * 1000, Math.random() * 1000);
+    const v1 = new Vector(300, 400);
     const v2 = v1.limit(2);
 
-    equal(v2.mag().toFixed(1), '2.0');
+    equal(v2.mag(), 2);
+    equal(v2.x, 1.2);
+    equal(v2.y, 1.6);
+  });
+
+  it('should not change vector shorter than limit', () => {
+    const v1 = new Vector(3, 4);
+    const v2 = v1.limit(10);
+
+    equal(v2.x, 3);
+    equal(v2.y, 4);
   });
 });

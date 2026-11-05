@@ -36,11 +36,11 @@ There are no dependencies, no build step and no linter. CI runs `npm test` on No
 
 Check these before changing behaviour:
 
-- `div(s)` throws when `s === 0`, but `divX`/`divY` do **not** guard against zero; they return `Infinity`/`NaN`.
-- `unit()` is `this.div(this.mag())`, so normalizing the zero vector **throws**.
+- `div`, `divX` and `divY` all throw when `s === 0`.
+- `unit()` returns the zero vector unchanged when normalizing the zero vector, since it has no direction (same as p5.js `normalize()`).
 - `normal()` returns `(-y, x)`. That is a 90° counter-clockwise rotation in maths (y-up) coordinates, which looks clockwise on screen because y points down.
 - `angle()` uses `Math.atan2(y, x)` and returns a value in `(-π, π]`. `fromAngle(a)` gives `(cos a, sin a)`, the inverse for unit vectors.
-- `equals(v)` uses strict `===` on both components with **no epsilon**. Floating-point results (for example after `fromAngle`) rarely compare equal.
+- `equals(v, epsilon = 0)` is an exact match by default. Pass a small `epsilon` (for example `1e-9`) when comparing results of floating-point calculations such as `fromAngle`.
 - `limit(l)` scales the vector down only when `mag > l` and never scales it up.
 - `distance(v)` reimplements the magnitude formula inline instead of calling `this.sub(v).mag()`, which avoids allocating a temporary vector.
 - Methods do not validate their arguments. Non-numbers or non-Vectors produce `NaN`.
@@ -49,7 +49,7 @@ Check these before changing behaviour:
 
 - Tests import from `../index.js` (the public entry point), not from `src/` directly.
 - Use `equal`/`throws` from `node:assert/strict`. For floating-point results, the existing tests compare `toFixed(n)` strings.
-- Not covered yet: `mulX`, `mulY`, `divX`, `divY`, `fromAngle`, `random`, `equals`, and `unit()` on the zero vector. The `limit` test uses random input.
+- Every public method has a test. Keep tests deterministic: use fixed inputs, and for `Vector.random` only assert properties (for example magnitude 1).
 
 ## Release process
 

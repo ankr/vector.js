@@ -213,6 +213,10 @@ export class Vector {
    * @return {Vector}
    */
   divX(s) {
+    if (s === 0) {
+      throw new Error('Can not divide vector with zero.');
+    }
+
     return new Vector(this.x / s, this.y);
   }
 
@@ -223,6 +227,10 @@ export class Vector {
    * @return {Vector}
    */
   divY(s) {
+    if (s === 0) {
+      throw new Error('Can not divide vector with zero.');
+    }
+
     return new Vector(this.x, this.y / s);
   }
 
@@ -247,10 +255,18 @@ export class Vector {
   /**
    * Normalize current vector
    *
+   * The zero vector has no direction, so it is returned unchanged.
+   *
    * @return {Vector}
    */
   unit() {
-    return this.div(this.mag());
+    const mag = this.mag();
+
+    if (mag === 0) {
+      return Vector.zero;
+    }
+
+    return this.div(mag);
   }
 
   /**
@@ -302,11 +318,19 @@ export class Vector {
   /**
    * Test if vector equals current
    *
+   * Each component may differ by at most `epsilon`, which defaults to 0
+   * (exact match). Pass a small tolerance when comparing results of
+   * floating-point calculations.
+   *
    * @param {Vector} v
+   * @param {number} [epsilon=0]
    * @return {boolean}
    */
-  equals(v) {
-    return this.x === v.x && this.y === v.y;
+  equals(v, epsilon = 0) {
+    return (
+      (this.x === v.x || Math.abs(this.x - v.x) <= epsilon) &&
+      (this.y === v.y || Math.abs(this.y - v.y) <= epsilon)
+    );
   }
 
   /**
