@@ -12,15 +12,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ankr/Vector.js.git"
+    "url": "git+https://github.com/ankr/vector.js.git"
   },
   "author": "ankr",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/ankr/Vector.js/issues"
+    "url": "https://github.com/ankr/vector.js/issues"
   },
   "publishConfig": {
     "access": "public"
   },
-  "homepage": "https://github.com/ankr/Vector.js#readme"
+  "homepage": "https://github.com/ankr/vector.js#readme"
 }
