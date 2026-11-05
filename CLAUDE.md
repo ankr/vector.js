@@ -46,4 +46,6 @@ Releases are automated, so **don't run `npm version` or `npm publish` by hand**.
 
 - Every PR to `main` must carry exactly one label: `major`, `minor`, `patch` or `skip-release` (enforced by `ensure-labels.yml`).
 - When the PR is merged, `release.yml` runs `npm version <label>`, pushes the commit and tag to `main`, and runs `npm publish`. This is where the bare `1.0.x` version commits in the history come from.
+- Publishing uses **npm trusted publishing (OIDC)**: no npm token is stored, and `release.yml` must stay the workflow configured as trusted publisher on npmjs.com. Provenance requires `package.json`'s `repository.url` to match the GitHub repo (`ankr/vector.js`, lowercase).
+- If the version bump was pushed but `npm publish` failed, **don't re-run the failed job** (it would bump again). Run the workflow manually (`gh workflow run release.yml`), which publishes the current version on `main` without bumping.
 - Published files: `package.json`'s `files` lists only `src/Vector.js`. npm also adds `index.js` (as `main`), `README.md` and `LICENSE` automatically.
