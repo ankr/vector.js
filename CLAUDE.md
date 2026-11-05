@@ -43,7 +43,7 @@ Check these before changing behaviour:
 - `equals(v, epsilon = 0)` is an exact match by default. Pass a small `epsilon` (for example `1e-9`) when comparing results of floating-point calculations such as `fromAngle`.
 - `limit(l)` scales the vector down only when `mag > l` and never scales it up. A negative `l` throws a `RangeError`.
 - `distance(v)` reimplements the magnitude formula inline instead of calling `this.sub(v).mag()`, which avoids allocating a temporary vector.
-- **Arguments are validated** with the module-private helpers `assertNumber` and `assertVector`, which throw a `TypeError`. The constructor rejects anything that isn't a number, including `NaN` (`Infinity` is allowed). Each method also checks its own arguments, so `mul('2')` throws instead of being silently coerced. Vector arguments are duck-typed: any object with numeric `x` and `y` is accepted. New methods should call the matching helper first.
+- Methods do not validate argument types; that is left to TypeScript-style typing rather than runtime checks (which would cost something on every call). Guards exist only for invalid *values*: division by zero and a negative `limit`.
 
 ## Tests
 
