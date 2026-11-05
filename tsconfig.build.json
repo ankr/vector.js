@@ -1,0 +1,12 @@
+{
+  // Compiles src/ to dist/ with type declarations (`npm run build`)
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": false,
+    "rootDir": "src",
+    "outDir": "dist",
+    "declaration": true,
+    "types": []
+  },
+  "include": ["src"]
+}

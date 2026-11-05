@@ -1,25 +1,22 @@
-const TAU = Math.PI * 2;
-
-export { TAU };
+export const TAU = Math.PI * 2;
 
 /**
- * Simple "immutable" vector class
+ * Simple immutable 2D vector
+ *
+ * Uses screen coordinates: y points down, so `Vector.up` is `(0, -1)`.
  */
 export class Vector {
   // Vectors are frozen, so the presets can safely be shared instances
-  static #zero = new Vector(0, 0);
-  static #up = new Vector(0, -1);
-  static #down = new Vector(0, 1);
-  static #left = new Vector(-1, 0);
-  static #right = new Vector(1, 0);
+  static readonly #zero = new Vector(0, 0);
+  static readonly #up = new Vector(0, -1);
+  static readonly #down = new Vector(0, 1);
+  static readonly #left = new Vector(-1, 0);
+  static readonly #right = new Vector(1, 0);
 
-  /**
-   * Constructor
-   *
-   * @param {number} x
-   * @param {number} y
-   */
-  constructor(x, y) {
+  readonly x: number;
+  readonly y: number;
+
+  constructor(x: number, y: number) {
     this.x = x;
     this.y = y;
 
@@ -28,184 +25,136 @@ export class Vector {
 
   /**
    * Zero vector
-   *
-   * @return {Vector}
    */
-  static get zero() {
+  static get zero(): Vector {
     return Vector.#zero;
   }
 
   /**
    * Up vector
-   *
-   * @return {Vector}
    */
-  static get up() {
+  static get up(): Vector {
     return Vector.#up;
   }
 
   /**
    * Down vector
-   *
-   * @return {Vector}
    */
-  static get down() {
+  static get down(): Vector {
     return Vector.#down;
   }
 
   /**
    * Left vector
-   *
-   * @return {Vector}
    */
-  static get left() {
+  static get left(): Vector {
     return Vector.#left;
   }
 
   /**
    * Right vector
-   *
-   * @return {Vector}
    */
-  static get right() {
+  static get right(): Vector {
     return Vector.#right;
   }
 
   /**
    * Unit vector in random direction
-   *
-   * @return {Vector}
    */
-  static get random() {
+  static random(): Vector {
     return Vector.fromAngle(TAU * Math.random());
   }
 
   /**
-   * Unit vector from angle
-   *
-   * @return {Vector}
+   * Unit vector from angle (in radians, measured from the X axis)
    */
-  static fromAngle(angle) {
+  static fromAngle(angle: number): Vector {
     return new Vector(Math.cos(angle), Math.sin(angle));
   }
 
   /**
    * Set X value
-   *
-   * @param {number} x
-   * @return {Vector}
    */
-  setX(x) {
+  setX(x: number): Vector {
     return new Vector(x, this.y);
   }
 
   /**
    * Set Y value
-   *
-   * @param {number} y
-   * @return {Vector}
    */
-  setY(y) {
+  setY(y: number): Vector {
     return new Vector(this.x, y);
   }
 
   /**
    * Add vector
-   *
-   * @param {Vector} v
-   * @return {Vector}
    */
-  add(v) {
+  add(v: Vector): Vector {
     return new Vector(this.x + v.x, this.y + v.y);
   }
 
   /**
    * Add scalar to X
-   *
-   * @param {number} s
-   * @return {Vector}
    */
-  addX(s) {
+  addX(s: number): Vector {
     return new Vector(this.x + s, this.y);
   }
 
   /**
    * Add scalar to Y
-   *
-   * @param {number} s
-   * @return {Vector}
    */
-  addY(s) {
+  addY(s: number): Vector {
     return new Vector(this.x, this.y + s);
   }
 
   /**
    * Subtract vector
-   *
-   * @param {Vector} v
-   * @return {Vector}
    */
-  sub(v) {
+  sub(v: Vector): Vector {
     return new Vector(this.x - v.x, this.y - v.y);
   }
 
   /**
    * Subtract scalar from X
-   *
-   * @param {number} s
-   * @return {Vector}
    */
-  subX(s) {
+  subX(s: number): Vector {
     return new Vector(this.x - s, this.y);
   }
 
   /**
    * Subtract scalar from Y
-   *
-   * @param {number} s
-   * @return {Vector}
    */
-  subY(s) {
+  subY(s: number): Vector {
     return new Vector(this.x, this.y - s);
   }
 
   /**
    * Multiply with scalar
-   *
-   * @param {number} s
-   * @return {Vector}
    */
-  mul(s) {
+  mul(s: number): Vector {
     return new Vector(this.x * s, this.y * s);
   }
 
   /**
    * Multiply X with scalar
-   *
-   * @param {number} s
-   * @return {Vector}
    */
-  mulX(s) {
+  mulX(s: number): Vector {
     return new Vector(this.x * s, this.y);
   }
 
   /**
    * Multiply Y with scalar
-   *
-   * @param {number} s
-   * @return {Vector}
    */
-  mulY(s) {
+  mulY(s: number): Vector {
     return new Vector(this.x, this.y * s);
   }
 
   /**
    * Divide by scalar
    *
-   * @param {number} s
-   * @return {Vector}
+   * @throws {Error} When dividing by zero
    */
-  div(s) {
+  div(s: number): Vector {
     if (s === 0) {
       throw new Error('Can not divide vector with zero.');
     }
@@ -216,10 +165,9 @@ export class Vector {
   /**
    * Divide X by scalar
    *
-   * @param {number} s
-   * @return {Vector}
+   * @throws {Error} When dividing by zero
    */
-  divX(s) {
+  divX(s: number): Vector {
     if (s === 0) {
       throw new Error('Can not divide vector with zero.');
     }
@@ -230,10 +178,9 @@ export class Vector {
   /**
    * Divide Y by scalar
    *
-   * @param {number} s
-   * @return {Vector}
+   * @throws {Error} When dividing by zero
    */
-  divY(s) {
+  divY(s: number): Vector {
     if (s === 0) {
       throw new Error('Can not divide vector with zero.');
     }
@@ -243,19 +190,15 @@ export class Vector {
 
   /**
    * Get magnitude
-   *
-   * @return {number}
    */
-  mag() {
+  mag(): number {
     return Math.sqrt(this.x * this.x + this.y * this.y);
   }
 
   /**
    * Get magnitude squared
-   *
-   * @return {number}
    */
-  magSq() {
+  magSq(): number {
     return this.x * this.x + this.y * this.y;
   }
 
@@ -263,10 +206,8 @@ export class Vector {
    * Normalize current vector
    *
    * The zero vector has no direction, so it is returned unchanged.
-   *
-   * @return {Vector}
    */
-  unit() {
+  unit(): Vector {
     const mag = this.mag();
 
     if (mag === 0) {
@@ -282,47 +223,36 @@ export class Vector {
    * Rotates the vector 90 degrees: (x, y) becomes (-y, x). This is
    * counter-clockwise in maths (y-up) coordinates, and therefore clockwise
    * on screen, where y points down (see `Vector.up`).
-   *
-   * @return {Vector}
    */
-  normal() {
+  normal(): Vector {
     return new Vector(-this.y, this.x);
   }
 
   /**
    * Get dot product of current and given vector
-   *
-   * @param {Vector} v
-   * @return {number}
    */
-  dot(v) {
+  dot(v: Vector): number {
     return this.x * v.x + this.y * v.y;
   }
 
   /**
    * Negate vector values
-   *
-   * @return {Vector}
    */
-  negate() {
+  negate(): Vector {
     return new Vector(-this.x, -this.y);
   }
 
   /**
    * Negate X value
-   *
-   * @return {Vector}
    */
-  negateX() {
+  negateX(): Vector {
     return new Vector(-this.x, this.y);
   }
 
   /**
    * Negate Y value
-   *
-   * @return {Vector}
    */
-  negateY() {
+  negateY(): Vector {
     return new Vector(this.x, -this.y);
   }
 
@@ -332,12 +262,8 @@ export class Vector {
    * Each component may differ by at most `epsilon`, which defaults to 0
    * (exact match). Pass a small tolerance when comparing results of
    * floating-point calculations.
-   *
-   * @param {Vector} v
-   * @param {number} [epsilon=0]
-   * @return {boolean}
    */
-  equals(v, epsilon = 0) {
+  equals(v: Vector, epsilon = 0): boolean {
     return (
       (this.x === v.x || Math.abs(this.x - v.x) <= epsilon) &&
       (this.y === v.y || Math.abs(this.y - v.y) <= epsilon)
@@ -346,29 +272,22 @@ export class Vector {
 
   /**
    * Swap vector values
-   *
-   * @return {Vector}
    */
-  swap() {
+  swap(): Vector {
     return new Vector(this.y, this.x);
   }
 
   /**
-   * Get angle from X axis.
-   *
-   * @return {number}
+   * Get angle from X axis, in radians within (-π, π]
    */
-  angle() {
+  angle(): number {
     return Math.atan2(this.y, this.x);
   }
 
   /**
    * Distance to other vector
-   *
-   * @param {Vector} v
-   * @return {number}
    */
-  distance(v) {
+  distance(v: Vector): number {
     const x = this.x - v.x;
     const y = this.y - v.y;
 
@@ -378,10 +297,9 @@ export class Vector {
   /**
    * Limit magnitude to scalar
    *
-   * @param {number} l
-   * @return {Vector}
+   * @throws {RangeError} When the limit is negative
    */
-  limit(l) {
+  limit(l: number): Vector {
     if (l < 0) {
       throw new RangeError('Can not limit vector to a negative magnitude.');
     }
