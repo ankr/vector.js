@@ -6,6 +6,13 @@ export { TAU };
  * Simple "immutable" vector class
  */
 export class Vector {
+  // Vectors are frozen, so the presets can safely be shared instances
+  static #zero = new Vector(0, 0);
+  static #up = new Vector(0, -1);
+  static #down = new Vector(0, 1);
+  static #left = new Vector(-1, 0);
+  static #right = new Vector(1, 0);
+
   /**
    * Constructor
    *
@@ -25,7 +32,7 @@ export class Vector {
    * @return {Vector}
    */
   static get zero() {
-    return new Vector(0, 0);
+    return Vector.#zero;
   }
 
   /**
@@ -34,7 +41,7 @@ export class Vector {
    * @return {Vector}
    */
   static get up() {
-    return new Vector(0, -1);
+    return Vector.#up;
   }
 
   /**
@@ -43,7 +50,7 @@ export class Vector {
    * @return {Vector}
    */
   static get down() {
-    return new Vector(0, 1);
+    return Vector.#down;
   }
 
   /**
@@ -52,7 +59,7 @@ export class Vector {
    * @return {Vector}
    */
   static get left() {
-    return new Vector(-1, 0);
+    return Vector.#left;
   }
 
   /**
@@ -61,7 +68,7 @@ export class Vector {
    * @return {Vector}
    */
   static get right() {
-    return new Vector(1, 0);
+    return Vector.#right;
   }
 
   /**
@@ -213,6 +220,10 @@ export class Vector {
    * @return {Vector}
    */
   divX(s) {
+    if (s === 0) {
+      throw new Error('Can not divide vector with zero.');
+    }
+
     return new Vector(this.x / s, this.y);
   }
 
@@ -223,6 +234,10 @@ export class Vector {
    * @return {Vector}
    */
   divY(s) {
+    if (s === 0) {
+      throw new Error('Can not divide vector with zero.');
+    }
+
     return new Vector(this.x, this.y / s);
   }
 
@@ -247,14 +262,26 @@ export class Vector {
   /**
    * Normalize current vector
    *
+   * The zero vector has no direction, so it is returned unchanged.
+   *
    * @return {Vector}
    */
   unit() {
-    return this.div(this.mag());
+    const mag = this.mag();
+
+    if (mag === 0) {
+      return Vector.zero;
+    }
+
+    return this.div(mag);
   }
 
   /**
    * Get normal vector
+   *
+   * Rotates the vector 90 degrees: (x, y) becomes (-y, x). This is
+   * counter-clockwise in maths (y-up) coordinates, and therefore clockwise
+   * on screen, where y points down (see `Vector.up`).
    *
    * @return {Vector}
    */
@@ -302,11 +329,19 @@ export class Vector {
   /**
    * Test if vector equals current
    *
+   * Each component may differ by at most `epsilon`, which defaults to 0
+   * (exact match). Pass a small tolerance when comparing results of
+   * floating-point calculations.
+   *
    * @param {Vector} v
+   * @param {number} [epsilon=0]
    * @return {boolean}
    */
-  equals(v) {
-    return this.x === v.x && this.y === v.y;
+  equals(v, epsilon = 0) {
+    return (
+      (this.x === v.x || Math.abs(this.x - v.x) <= epsilon) &&
+      (this.y === v.y || Math.abs(this.y - v.y) <= epsilon)
+    );
   }
 
   /**
@@ -347,15 +382,19 @@ export class Vector {
    * @return {Vector}
    */
   limit(l) {
-    const mag = this.mag();
-    let x = this.x;
-    let y = this.y;
-
-    if (mag > l) {
-      x = (x * l) / mag;
-      y = (y * l) / mag;
+    if (l < 0) {
+      throw new RangeError('Can not limit vector to a negative magnitude.');
     }
 
-    return new Vector(x, y);
+    const magSq = this.magSq();
+
+    // Compare squared magnitudes to skip the square root when within the limit
+    if (magSq <= l * l) {
+      return this;
+    }
+
+    const mag = Math.sqrt(magSq);
+
+    return new Vector((this.x * l) / mag, (this.y * l) / mag);
   }
 }
