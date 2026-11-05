@@ -30,20 +30,8 @@ There are no dependencies, no build step and no linter. CI runs `npm test` on No
 - **Immutability:** the constructor calls `Object.freeze(this)`. Every operation returns a **new** `Vector` and never mutates `this`. New methods must follow this rule. Assigning to `x`/`y` throws a `TypeError` only when the *calling* code runs in strict mode (ES modules always do). In sloppy-mode scripts the assignment is silently ignored. This is a known limitation: only a `Proxy` could make it always throw, and that would slow down every property access.
 - **Naming:** whole-vector ops have short names (`add`, `sub`, `mul`, `div`, `negate`). Per-component variants add an `X`/`Y` suffix (`addX`, `mulY`, `negateX`, ...). Vector arguments are named `v` and scalar arguments `s`.
 - **Screen coordinates (y-down):** `Vector.up` is `(0, -1)` and `Vector.down` is `(0, 1)`. Keep this in mind for anything involving direction or rotation.
+- **No runtime type checks:** argument types are left to typing, not checked on every call. Only invalid *values* are guarded (division by zero, negative `limit`).
 - Static presets (`zero`, `up`, `down`, `left`, `right`, `random`) are **getters** that return a fresh instance on every access. `random` is a unit vector at a random angle.
-
-## Maths notes and quirks
-
-Check these before changing behaviour:
-
-- `div`, `divX` and `divY` all throw when `s === 0`.
-- `unit()` returns the zero vector unchanged when normalizing the zero vector, since it has no direction (same as p5.js `normalize()`).
-- `normal()` returns `(-y, x)`. That is a 90° counter-clockwise rotation in maths (y-up) coordinates, which looks clockwise on screen because y points down.
-- `angle()` uses `Math.atan2(y, x)` and returns a value in `(-π, π]`. `fromAngle(a)` gives `(cos a, sin a)`, the inverse for unit vectors.
-- `equals(v, epsilon = 0)` is an exact match by default. Pass a small `epsilon` (for example `1e-9`) when comparing results of floating-point calculations such as `fromAngle`.
-- `limit(l)` scales the vector down only when `mag > l` and never scales it up. A negative `l` throws a `RangeError`.
-- `distance(v)` reimplements the magnitude formula inline instead of calling `this.sub(v).mag()`, which avoids allocating a temporary vector.
-- Methods do not validate argument types; that is left to TypeScript-style typing rather than runtime checks (which would cost something on every call). Guards exist only for invalid *values*: division by zero and a negative `limit`.
 
 ## Tests
 
