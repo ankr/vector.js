@@ -38,11 +38,10 @@ jobs:
       - name: Update npm
         run: npm install -g npm@latest
 
-      # - name: Install Dependencies
-      #   run: npm install
+      - name: Install Dependencies
+        run: npm ci
 
-      # - name: Build Package
-      #   run: npm run build
+      # No explicit build step: `npm publish` runs the `prepack` script, which builds dist/
 
       - name: Setup git config
         run: |

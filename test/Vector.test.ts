@@ -1,13 +1,15 @@
 import { describe, it } from 'node:test';
 import { equal, throws } from 'node:assert/strict';
 
-import { Vector } from '../index.js';
+import { Vector } from '../src/index.ts';
 
 describe('Vector properties', () => {
   it('should be immutable', () => {
     const v = new Vector(1, 2);
 
+    // @ts-expect-error x is readonly
     throws(() => (v.x = 2));
+    // @ts-expect-error y is readonly
     throws(() => (v.y = 3));
   });
 });
@@ -50,6 +52,7 @@ describe('Static methods', () => {
     equal(Vector.down, Vector.down);
     equal(Vector.left, Vector.left);
     equal(Vector.right, Vector.right);
+    // @ts-expect-error zero is a getter without setter
     throws(() => (Vector.zero = new Vector(1, 1)));
   });
 
@@ -62,7 +65,7 @@ describe('Static methods', () => {
   });
 
   it('should create random unit vector', () => {
-    const v = Vector.random;
+    const v = Vector.random();
 
     equal(v.mag().toFixed(3), '1.000');
   });

@@ -2,13 +2,23 @@
   "name": "@ankr/vector",
   "version": "1.0.4",
   "type": "module",
-  "description": "Simple \"immutable\" 2d vector class.",
-  "main": "index.js",
+  "description": "Simple immutable 2D vector class.",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
   "files": [
-    "src/Vector.js"
+    "dist"
   ],
   "scripts": {
-    "test": "node --test"
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc",
+    "test": "node --test 'test/**/*.test.ts'",
+    "prepack": "npm run build"
   },
   "repository": {
     "type": "git",
@@ -22,5 +32,9 @@
   "publishConfig": {
     "access": "public"
   },
-  "homepage": "https://github.com/ankr/vector.js#readme"
+  "homepage": "https://github.com/ankr/vector.js#readme",
+  "devDependencies": {
+    "@types/node": "^24.19.2",
+    "typescript": "^7.0.2"
+  }
 }

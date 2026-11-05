@@ -1,6 +1,6 @@
 # Vector.js
 
-Simple "immutable" vector class.
+Simple immutable 2D vector class, written in TypeScript. Type declarations are included.
 
 # Installation
 
@@ -12,7 +12,10 @@ $ npm install @ankr/vector
 
 See [tests](test/) for more info.
 ```
-import { Vector, TAU } from '@ankr/vector';
+import { Vector } from '@ankr/vector';
 
-console.log(TAU, Vector);
+const position = new Vector(3, 4);
+const velocity = Vector.random().mul(2);
+
+console.log(position.add(velocity).limit(10));
 ```
